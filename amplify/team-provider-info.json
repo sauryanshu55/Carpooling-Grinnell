@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-rideshareapp-dev-8b121-authRole",
+      "UnauthRoleArn": "arn:aws:iam::767397689678:role/amplify-rideshareapp-dev-8b121-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::767397689678:role/amplify-rideshareapp-dev-8b121-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-rideshareapp-dev-8b121-deployment",
+      "UnauthRoleName": "amplify-rideshareapp-dev-8b121-unauthRole",
+      "StackName": "amplify-rideshareapp-dev-8b121",
+      "StackId": "arn:aws:cloudformation:us-east-2:767397689678:stack/amplify-rideshareapp-dev-8b121/d1b6c590-3bf4-11ef-a163-067828334ad1",
+      "AmplifyAppId": "d2v5qlewhivrsd"
+    },
+    "categories": {
+      "auth": {
+        "rideshareappabe98b84": {}
+      }
+    }
+  }
+}

@@ -14,6 +14,7 @@ import {
   StyleSheet,
   Text,
   useColorScheme,
+  Pressable,
   View,
 } from 'react-native';
 
@@ -28,6 +29,23 @@ import {
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
+import {
+  withAuthenticator,
+  useAuthenticator
+} from '@aws-amplify/ui-react-native';
+
+const userSelector = (context) => [context.user];
+
+const SignOutButton = () => {
+  const { user, signOut } = useAuthenticator(userSelector);
+  return (
+    <Pressable onPress={signOut} style={styles.buttonContainer}>
+      <Text style={styles.buttonText}>
+        Hello, {user.username}! Click here to sign out!
+      </Text>
+    </Pressable>
+  );
+};
 
 function Section({children, title}: SectionProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -89,6 +107,9 @@ function App(): React.JSX.Element {
           <Section title="Learn More">
             Read the docs to discover what to do next:
           </Section>
+          <Section title="Sign Out">
+            <SignOutButton/>
+          </Section> 
           <LearnMoreLinks />
         </View>
       </ScrollView>
@@ -115,4 +136,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default withAuthenticator(App);
