@@ -3,12 +3,15 @@ import {
     Text,
     Button
 } from 'react-native'
+import {
+    AddButton
+} from './ButtonUtilties'
 
 export function HomeScreen({navigation}){
     return (
         <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
             <Text>Home</Text>
-            <Button title='Go to details page' onPress={()=>navigation.navigate('Details')}/>
+            <AddButton/>
         </View>
       );
   }

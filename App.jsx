@@ -4,6 +4,7 @@ import {withAuthenticator, useAuthenticator} from '@aws-amplify/ui-react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import {HomeScreen} from './src/screens/HomeScreen'
 import {DetailsScreen} from './src/screens/DetailsScreen'
+import {ProfileScreen} from './src/screens/ProfileScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
@@ -16,6 +17,7 @@ function App() {
       <Stack.Navigator>
         <Stack.Screen name='Home' component={HomeScreen}/>
         <Stack.Screen name='Details' component={DetailsScreen}/>
+        <Stack.Screen name='Profile' component={ProfileScreen}/>
         
       </Stack.Navigator>
     </NavigationContainer>
