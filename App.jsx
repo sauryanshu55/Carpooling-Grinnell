@@ -7,7 +7,6 @@ import {DetailsScreen} from './src/screens/DetailsScreen'
 import {ProfileScreen} from './src/screens/ProfileScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-
 const Stack=createNativeStackNavigator();
 
 function App() {

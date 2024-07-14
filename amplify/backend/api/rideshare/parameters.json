@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "rideshare",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authrideshareappabe98b84",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

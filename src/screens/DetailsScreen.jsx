@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import {View,Text,Button,Switch, TextInput} from 'react-native'
 import DatePicker from 'react-native-date-picker'
-
+import { generateClient } from 'aws-amplify/api';
+import { createRideDetails } from '../graphql/mutations';
+ 
 export function DetailsScreen({navigation}){
 
     const [date,setDate]=useState(new Date())
@@ -10,6 +12,26 @@ export function DetailsScreen({navigation}){
     const [byFlexible, setByFlexible] = useState(""); 
     const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, ""))}; 
 
+    const client=generateClient();
+
+    const save=async()=>{
+        try{
+            const rideDetails={
+                dateTime: date.toISOString(),
+                isFlexible: isFlexible,
+                byFlexible: isFlexible? parseInt(byFlexible): null
+            }
+            
+            const result= await client.graphql({
+                query: createRideDetails,
+                variables: { input: rideDetails}
+            })
+    
+            
+        } catch(error){
+            
+        }
+    }
     
     return (
         <View>
@@ -24,7 +46,11 @@ export function DetailsScreen({navigation}){
                 <TextInput 
                     onChangeText={handleByFlexibleTimeChange} value={byFlexible} keyboardType="numeric" placeholder="15 mins"
                 />
-            ) : null}        
+            ) : null}     
+
+            {/* Reuest Button */}
+            <Button title='Request Ride' onPress={save}/>
+
         </View>
     );
 }
