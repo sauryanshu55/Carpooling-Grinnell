@@ -3,18 +3,22 @@ import {View,Text,Button,Switch, TextInput} from 'react-native'
 import DatePicker from 'react-native-date-picker'
 import { generateClient } from 'aws-amplify/api';
 import { createRideDetails } from '../graphql/mutations';
-import {logger} from '../../logger' 
+
 
 export function DetailsScreen({navigation}){
 
+    // SET STATES
     const [date,setDate]=useState(new Date())
     const [isFlexible,setIsFlexible]=useState(false)
     const toggleIsFlexibleSwitch = () => setIsFlexible(previousState => !previousState);
     const [byFlexible, setByFlexible] = useState(""); 
     const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, ""))}; 
+    const [unit, setUnit]=useState('mins')
 
+    // CLIENT
     const client=generateClient();
 
+    // SAVE
     const save=async()=>{
         try{
             const rideDetails={
@@ -28,12 +32,13 @@ export function DetailsScreen({navigation}){
                 variables: { input: rideDetails}
             })
             
-            logger("SAVED: "+ rideDetails);
+            console.log("SAVED")
         } catch(error){
-            logger("ERROR: "+ error);
+            console.log("ERROR: " + error)
         }
     }
     
+    // RETURN COMPONENT
     return (
         <View>
             {/* Date and Time */}
@@ -43,11 +48,11 @@ export function DetailsScreen({navigation}){
             <Switch value={isFlexible} onValueChange={toggleIsFlexibleSwitch}/>
 
             {/* Flexible By */}
-            {isFlexible ? (
+            {isFlexible && (
                 <TextInput 
                     onChangeText={handleByFlexibleTimeChange} value={byFlexible} keyboardType="numeric" placeholder="15 mins"
                 />
-            ) : null}     
+            )}
 
             {/* Reuest Button */}
             <Button title='Request Ride' onPress={save}/>
