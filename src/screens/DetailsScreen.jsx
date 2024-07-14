@@ -3,7 +3,8 @@ import {View,Text,Button,Switch, TextInput} from 'react-native'
 import DatePicker from 'react-native-date-picker'
 import { generateClient } from 'aws-amplify/api';
 import { createRideDetails } from '../graphql/mutations';
- 
+import {logger} from '../../logger' 
+
 export function DetailsScreen({navigation}){
 
     const [date,setDate]=useState(new Date())
@@ -26,10 +27,10 @@ export function DetailsScreen({navigation}){
                 query: createRideDetails,
                 variables: { input: rideDetails}
             })
-    
             
+            logger("SAVED: "+ rideDetails);
         } catch(error){
-            
+            logger("ERROR: "+ error);
         }
     }
     
