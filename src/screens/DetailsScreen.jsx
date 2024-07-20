@@ -3,7 +3,7 @@ import {View,Text,Button,Switch, TextInput} from 'react-native'
 import DatePicker from 'react-native-date-picker'
 import { generateClient } from 'aws-amplify/api';
 import { createRideDetails } from '../graphql/mutations';
-
+import { ChooseDestinationButton } from './ButtonUtilties';
 
 export function DetailsScreen({navigation}){
 
@@ -53,6 +53,9 @@ export function DetailsScreen({navigation}){
                     onChangeText={handleByFlexibleTimeChange} value={byFlexible} keyboardType="numeric" placeholder="15 mins"
                 />
             )}
+
+            {/* Choose Destination */}
+            <ChooseDestinationButton/>
 
             {/* Reuest Button */}
             <Button title='Request Ride' onPress={save}/>

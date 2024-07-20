@@ -48,12 +48,6 @@ export function HomeScreen({navigation}){
       
       return (
           <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text>Home</Text>
-              <View>
-                {rides.map(ride => (
-                    <RideItem key={ride.id} ride={ride} />
-                ))}
-              </View>
               <AddButton />
           </View>
       );

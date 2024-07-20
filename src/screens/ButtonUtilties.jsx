@@ -17,6 +17,22 @@ export function AddButton() {
   );
 }
 
+
+export function ChooseDestinationButton(){
+  const navigation= useNavigation();
+    
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('MapScreen')}
+      >
+      <Text style={styles.buttonText}>Choose Destination</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
+
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
@@ -38,5 +54,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 
 
