@@ -1,155 +1,183 @@
-import React, { useRef, useState } from 'react';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Dimensions, StyleSheet, View, Text, TextInput, TouchableOpacity, Keyboard, Alert } from 'react-native';
-import { keys } from '../../keys';
-import { Button } from 'react-native-paper';
+import MapView, { LatLng, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { StyleSheet, View, Dimensions, Text, TouchableOpacity, } from "react-native";
+import { GooglePlaceDetail, GooglePlacesAutocomplete, } from "react-native-google-places-autocomplete";
+import { useRef, useState } from "react";
+import MapViewDirections from "react-native-maps-directions";
+import { keys } from '../../keys'
 
 const { width, height } = Dimensions.get("window");
 
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const INITIAL_LAT = 28.46254;
-const INITIAL_LNG = -81.397272;
 const INITIAL_POSITION = {
-  latitude: 41.7499993956888,
-  longitude: -92.7209455949381,
-  latitudeDelta: 1,
-  longitudeDelta: 1,
+  latitude: 40.76711,
+  longitude: -73.979704,
+  latitudeDelta: LATITUDE_DELTA,
+  longitudeDelta: LONGITUDE_DELTA,
+};
+
+function InputAutocomplete({label,placeholder,onPlaceSelected,}) {
+  return (
+    <>
+      <Text>{label}</Text>
+
+      <GooglePlacesAutocomplete
+        styles={{ textInput: styles.input }}
+        placeholder={placeholder || ""}
+        fetchDetails
+        onPress={(data, details = null) => {
+          onPlaceSelected(details);
+        }}
+
+        query={{
+          key: keys.google_maps,
+          language: "en",
+        }}
+      />
+
+    </>
+  );
 }
 
 export function MapScreen() {
-  const [searchText, setSearchText] = useState('')
-  const [results, setResuts] = useState([])
-  const [dest, setDest] = useState({})
-  const map = useRef(null)
+  const [origin, setOrigin] = useState();
+  const [destination, setDestination] = useState();
+  const [showDirections, setShowDirections] = useState(false);
+  const [distance, setDistance] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const mapRef = useRef(null);
 
-  console.log("\n\nNULL " + dest.geometry)
-
-  const onMarkerSelected = (location) => {
-    setDest(location)
-    console.log("\n\nSomething " + location.geometry)
-  }
-
-  const searchPlaces = async () => {
-    if (!searchText.trim().length) return;
-    const googleApisUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json";
-    const input = searchText.trim()
-    const location = `${INITIAL_LAT},${INITIAL_LNG}&radius=2000`
-    const url = `${googleApisUrl}?query=${input}&${location}&key=${keys.google_maps}`
-
-    try {
-      const resp = await fetch(url)
-      const json = await resp.json()
-
-      if (json && json.results) {
-        const coords = []
-        for (const item of json.results) {
-          coords.push({ latitude: item.geometry.location.lat, longitude: item.geometry.location.lng })
-        }
-        setResuts(json.results)
-
-        if (coords.length) {
-
-          map.current?.fitToCoordinates(coords,
-            {
-              edgePadding: {
-                top: 50,
-                right: 50,
-                bottom: 50,
-                left: 50
-              },
-              animated: true
-            })
-          Keyboard.dismiss()
-        }
-      }
-
-
-    }
-    catch (e) {
-      console.error(e)
+  const moveTo = async (position) => {
+    const camera = await mapRef.current?.getCamera();
+    if (camera) {
+      camera.center = position;
+      mapRef.current?.animateCamera(camera, { duration: 1000 });
     }
   };
 
+  const edgePaddingValue = 70;
+
+  const edgePadding = {
+    top: edgePaddingValue,
+    right: edgePaddingValue,
+    bottom: edgePaddingValue,
+    left: edgePaddingValue,
+  };
+
+  const traceRouteOnReady = (args) => {
+    if (args) {
+      setDistance(args.distance);
+      setDuration(args.duration);
+    }
+  };
+
+  const traceRoute = () => {
+    if (origin && destination) {
+      setShowDirections(true);
+      mapRef.current?.fitToCoordinates([origin, destination], { edgePadding });
+    }
+  };
+
+  const onPlaceSelected = (details, flag) => {
+    const set = flag === "origin" ? setOrigin : setDestination;
+    const position = {
+      latitude: details?.geometry.location.lat || 0,
+      longitude: details?.geometry.location.lng || 0,
+    };
+    set(position);
+    moveTo(position);
+  };
   return (
     <View style={styles.container}>
 
-      {/* MAP VIEW */}
-      <MapView style={styles.map} initialRegion={INITIAL_POSITION} ref={map}>
-        {results.length ? results.map((item, i) => {
-          const coord = { latitude: item.geometry.location.lat, longitude: item.geometry.location.lng }
+      <MapView
+        ref={mapRef}
+        style={styles.map}
+        provider={PROVIDER_GOOGLE}
+        initialRegion={INITIAL_POSITION}>
 
-          return <Marker
-            key={`search-item-${i}`} coordinate={coord} title={item.name}
-            onPress={() => onMarkerSelected(item)}
+        {origin && <Marker coordinate={origin} />}
+        
+        {destination && <Marker coordinate={destination} />}
+        
+        {showDirections && origin && destination && (
+          <MapViewDirections
+            origin={origin}
+            destination={destination}
+            apikey={keys.google_maps}
+            strokeColor="#6644ff"
+            strokeWidth={4}
+            onReady={traceRouteOnReady}
           />
-        }) : null}
+        )}
       </MapView>
 
-      {/* SEARCH BOX */}
-      <View style={styles.searchBox}>
+      <View style={styles.searchContainer}>
+        <InputAutocomplete
+          label="Origin"
+          onPlaceSelected={(details) => {
+            onPlaceSelected(details, "origin");
+          }}
+        />
 
-        <Text style={styles.searchBoxField}>Where do you want to go?</Text>
+        <InputAutocomplete
+          label="Destination"
+          onPlaceSelected={(details) => {
+            onPlaceSelected(details, "destination");
+          }}
+        />
 
-        <TextInput style={styles.searchBoxField} onChangeText={setSearchText} autoCapitalize='sentences' />
-
-        <TouchableOpacity style={styles.buttonContainer} onPress={searchPlaces}>
-          <Text style={styles.buttonLabel}>Search</Text>
+        <TouchableOpacity style={styles.button} onPress={traceRoute}>
+          <Text style={styles.buttonText}>Trace route</Text>
         </TouchableOpacity>
-
-        {dest.geometry &&
-          <TouchableOpacity style={styles.buttonContainer}>
-            <Text style={styles.buttonLabel}>Go here</Text>
-          </TouchableOpacity>
-        }
+        
+        {distance && duration ? (
+          <View>
+            <Text>Distance: {distance.toFixed(2)}</Text>
+            <Text>Duration: {Math.ceil(duration)} min</Text>
+          </View>
+        ) : null}
 
       </View>
     </View>
-
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  map: {
-    width: '100%',
-    height: '100%'
-  },
-  searchBox: {
-    position: 'absolute',
-    width: '90%',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#aaa',
-    backgroundColor: 'white',
-    padding: 8,
-    alignSelf: 'center',
-    marginTop: 60
-  },
-
-  searchBoxField: {
-    borderColor: "#777",
-    borderWidth: 1,
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    fontSize: 18,
-    marginBottom: 0,
-  },
-
-  buttonContainer: {
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  map: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+  },
+  searchContainer: {
+    position: "absolute",
+    width: "90%",
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 4,
     padding: 8,
-    backgroundColor: "#26f",
     borderRadius: 8,
   },
-
-  buttonLabel: {
-    fontSize: 18,
-    color: 'white',
+  input: {
+    borderColor: "#888",
+    borderWidth: 1,
+  },
+  button: {
+    backgroundColor: "#bbb",
+    paddingVertical: 12,
+    marginTop: 16,
+    borderRadius: 4,
+  },
+  buttonText: {
+    textAlign: "center",
   },
 });
