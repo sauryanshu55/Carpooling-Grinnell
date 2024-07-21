@@ -3,6 +3,7 @@ import {AddButton} from './ButtonUtilties'
 import { useState,useEffect } from 'react';
 import { listRideDetails } from '../graphql/queries';
 import { generateClient } from 'aws-amplify/api';
+import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 
 export function HomeScreen({navigation}){
     // SET STATES AND HOOKS
@@ -36,6 +37,15 @@ export function HomeScreen({navigation}){
         </View>
     }
 
+    const theme = {
+        ...DefaultTheme,
+        colors: {
+          ...DefaultTheme.colors,
+          primary: 'tomato',
+          secondary: 'yellow',
+        },
+      };
+
     function RideItem({ ride }) {
         return (
           <View>
@@ -47,8 +57,10 @@ export function HomeScreen({navigation}){
       }
       
       return (
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-              <AddButton />
-          </View>
+          <PaperProvider theme={theme}>
+                <View style={{ flex: 1, justifyContent: 'center' }}>
+                <AddButton />
+            </View>
+          </PaperProvider>
       );
   }
