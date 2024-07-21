@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Dimensions, StyleSheet, View, Text, TextInput, TouchableOpacity, Keyboard } from 'react-native';
+import { Dimensions, StyleSheet, View, Text, TextInput, TouchableOpacity, Keyboard, Alert } from 'react-native';
 import { keys } from '../../keys';
+import { Button } from 'react-native-paper';
 
 const { width, height } = Dimensions.get("window");
 
@@ -17,12 +18,18 @@ const INITIAL_POSITION = {
   longitudeDelta: 1,
 }
 
-
-
 export function MapScreen() {
   const [searchText, setSearchText] = useState('')
   const [results, setResuts] = useState([])
+  const [dest, setDest] = useState({})
   const map = useRef(null)
+
+  console.log("\n\nNULL " + dest.geometry)
+
+  const onMarkerSelected = (location) => {
+    setDest(location)
+    console.log("\n\nSomething " + location.geometry)
+  }
 
   const searchPlaces = async () => {
     if (!searchText.trim().length) return;
@@ -72,7 +79,11 @@ export function MapScreen() {
       <MapView style={styles.map} initialRegion={INITIAL_POSITION} ref={map}>
         {results.length ? results.map((item, i) => {
           const coord = { latitude: item.geometry.location.lat, longitude: item.geometry.location.lng }
-          return <Marker key={`search-item-${i}`} coordinate={coord} title={item.name} description='' />
+
+          return <Marker
+            key={`search-item-${i}`} coordinate={coord} title={item.name}
+            onPress={() => onMarkerSelected(item)}
+          />
         }) : null}
       </MapView>
 
@@ -87,9 +98,15 @@ export function MapScreen() {
           <Text style={styles.buttonLabel}>Search</Text>
         </TouchableOpacity>
 
-      </View>
+        {dest.geometry &&
+          <TouchableOpacity style={styles.buttonContainer}>
+            <Text style={styles.buttonLabel}>Go here</Text>
+          </TouchableOpacity>
+        }
 
+      </View>
     </View>
+
   )
 }
 
@@ -134,5 +151,5 @@ const styles = StyleSheet.create({
   buttonLabel: {
     fontSize: 18,
     color: 'white',
-  }
+  },
 });

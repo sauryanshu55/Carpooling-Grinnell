@@ -43,7 +43,16 @@ export function DetailsScreen({navigation}){
     return (
         <View style={styles.container}>
           <Title style={styles.title}>Request a Ride</Title>
-    
+          {/* Choose Destination Button */}
+          <Button
+            mode="contained"
+            onPress={() => navigation.navigate('MapScreen')}
+            style={styles.button}
+            labelStyle={styles.buttonLabel}
+          >
+            Choose Destination
+          </Button>
+
           {/* Date and Time */}
           <View style={styles.formGroup}>
             <Subheading>Select a Date and Time</Subheading>
