@@ -1,5 +1,6 @@
 import MapView, { LatLng, Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { StyleSheet, View, Dimensions, Text, TouchableOpacity, } from "react-native";
+import { View, Dimensions, StyleSheet } from "react-native";
+import{Text, Button} from 'react-native-paper'
 import { GooglePlaceDetail, GooglePlacesAutocomplete, } from "react-native-google-places-autocomplete";
 import { useRef, useState } from "react";
 import MapViewDirections from "react-native-maps-directions";
@@ -11,11 +12,16 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const INITIAL_POSITION = {
-  latitude: 40.76711,
-  longitude: -73.979704,
+  latitude: 41.74923097567978,
+  longitude: -92.72014428505408,
   latitudeDelta: LATITUDE_DELTA,
   longitudeDelta: LONGITUDE_DELTA,
 };
+
+const grinnellCoords={
+  latitude:41.74923097567978,
+  longitude:-92.72014428505408
+}
 
 function InputAutocomplete({label,placeholder,onPlaceSelected,}) {
   return (
@@ -80,12 +86,12 @@ export function MapScreen() {
   };
 
   const onPlaceSelected = (details, flag) => {
-    const set = flag === "origin" ? setOrigin : setDestination;
+    setOrigin(grinnellCoords)
     const position = {
       latitude: details?.geometry.location.lat || 0,
       longitude: details?.geometry.location.lng || 0,
     };
-    set(position);
+    setDestination(position);
     moveTo(position);
   };
   return (
@@ -114,12 +120,6 @@ export function MapScreen() {
       </MapView>
 
       <View style={styles.searchContainer}>
-        <InputAutocomplete
-          label="Origin"
-          onPlaceSelected={(details) => {
-            onPlaceSelected(details, "origin");
-          }}
-        />
 
         <InputAutocomplete
           label="Destination"
@@ -128,9 +128,14 @@ export function MapScreen() {
           }}
         />
 
-        <TouchableOpacity style={styles.button} onPress={traceRoute}>
-          <Text style={styles.buttonText}>Trace route</Text>
-        </TouchableOpacity>
+          <Button
+            mode="contained"
+            onPress={traceRoute}
+            style={styles.button}
+            labelStyle={styles.buttonLabel}
+          >
+            Set Destination
+          </Button>
         
         {distance && duration ? (
           <View>
@@ -147,9 +152,9 @@ export function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f5f5f5",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   map: {
     width: Dimensions.get("window").width,
@@ -172,12 +177,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   button: {
-    backgroundColor: "#bbb",
-    paddingVertical: 12,
-    marginTop: 16,
-    borderRadius: 4,
+    marginTop: 20,
+    paddingVertical: 8,
   },
-  buttonText: {
-    textAlign: "center",
+  buttonLabel: {
+    fontSize: 16,
   },
 });
