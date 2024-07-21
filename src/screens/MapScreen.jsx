@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Dimensions, StyleSheet, View, Text, TextInput, TouchableOpacity, Keyboard } from 'react-native';
+import { keys } from '../../keys';
 
 const { width, height } = Dimensions.get("window");
 
@@ -28,7 +29,7 @@ export function MapScreen() {
     const googleApisUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json";
     const input = searchText.trim()
     const location = `${INITIAL_LAT},${INITIAL_LNG}&radius=2000`
-    const url = `${googleApisUrl}?query=${input}&${location}&key=AIzaSyB86zxZVMV2tWmqz26id3px7ZZPsjUo8L0`
+    const url = `${googleApisUrl}?query=${input}&${location}&key=${keys.google_maps}`
 
     try {
       const resp = await fetch(url)
@@ -53,7 +54,7 @@ export function MapScreen() {
               },
               animated: true
             })
-            Keyboard.dismiss()
+          Keyboard.dismiss()
         }
       }
 
@@ -68,7 +69,12 @@ export function MapScreen() {
     <View style={styles.container}>
 
       {/* MAP VIEW */}
-      <MapView style={styles.map} initialRegion={INITIAL_POSITION} ref={map}></MapView>
+      <MapView style={styles.map} initialRegion={INITIAL_POSITION} ref={map}>
+        {results.length ? results.map((item, i) => {
+          const coord = { latitude: item.geometry.location.lat, longitude: item.geometry.location.lng }
+          return <Marker key={`search-item-${i}`} coordinate={coord} title={item.name} description='' />
+        }) : null}
+      </MapView>
 
       {/* SEARCH BOX */}
       <View style={styles.searchBox}>
