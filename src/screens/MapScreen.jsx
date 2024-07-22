@@ -1,10 +1,11 @@
 import MapView, { LatLng, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { View, Dimensions, StyleSheet } from "react-native";
-import{Text, Button} from 'react-native-paper'
+import { Text, Button } from 'react-native-paper'
 import { GooglePlaceDetail, GooglePlacesAutocomplete, } from "react-native-google-places-autocomplete";
 import { useRef, useState } from "react";
 import MapViewDirections from "react-native-maps-directions";
 import { keys } from '../../keys'
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -18,12 +19,14 @@ const INITIAL_POSITION = {
   longitudeDelta: LONGITUDE_DELTA,
 };
 
-const grinnellCoords={
-  latitude:41.74923097567978,
-  longitude:-92.72014428505408
+const grinnellCoords = {
+  latitude: 41.74923097567978,
+  longitude: -92.72014428505408
 }
 
-function InputAutocomplete({label,placeholder,onPlaceSelected,}) {
+function InputAutocomplete({ label, placeholder, onPlaceSelected, }) {
+
+
   return (
     <>
       <Text>{label}</Text>
@@ -46,13 +49,26 @@ function InputAutocomplete({label,placeholder,onPlaceSelected,}) {
   );
 }
 
-export function MapScreen() {
+function calculateTripCost(distance) {
+  const averageGasMileage = 25;
+  const averageGasPrice = 3.5;
+  const gallonsNeeded = distance / averageGasMileage;
+  const totalCost = gallonsNeeded * averageGasPrice;
+
+  return totalCost;
+}
+
+export function MapScreen({ route }) {
   const [origin, setOrigin] = useState();
-  const [destination, setDestination] = useState();
+  const [destinationCoords, setDestinationCoords] = useState();
   const [showDirections, setShowDirections] = useState(false);
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [price, setPrice] = useState(0)
+  const [destination, setDestination] = useState(null)
   const mapRef = useRef(null);
+
+  const navigation = useNavigation()
 
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
@@ -75,25 +91,35 @@ export function MapScreen() {
     if (args) {
       setDistance(args.distance);
       setDuration(args.duration);
+      setPrice(calculateTripCost(args.distance));
     }
   };
 
   const traceRoute = () => {
-    if (origin && destination) {
-      setShowDirections(true);
-      mapRef.current?.fitToCoordinates([origin, destination], { edgePadding });
+    if (origin && destinationCoords) {
+      mapRef.current?.fitToCoordinates([origin, destinationCoords], { edgePadding });
     }
   };
 
   const onPlaceSelected = (details, flag) => {
     setOrigin(grinnellCoords)
+    setDestination(details)
+
     const position = {
       latitude: details?.geometry.location.lat || 0,
       longitude: details?.geometry.location.lng || 0,
     };
-    setDestination(position);
+
+    setDestinationCoords(position);
     moveTo(position);
+    setShowDirections(true)
+    traceRoute()
   };
+
+  const handleSelect = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
 
@@ -104,13 +130,13 @@ export function MapScreen() {
         initialRegion={INITIAL_POSITION}>
 
         {origin && <Marker coordinate={origin} />}
-        
-        {destination && <Marker coordinate={destination} />}
-        
-        {showDirections && origin && destination && (
+
+        {destinationCoords && <Marker coordinate={destinationCoords} />}
+
+        {showDirections && origin && destinationCoords && (
           <MapViewDirections
             origin={origin}
-            destination={destination}
+            destination={destinationCoords}
             apikey={keys.google_maps}
             strokeColor="#6644ff"
             strokeWidth={4}
@@ -128,19 +154,32 @@ export function MapScreen() {
           }}
         />
 
+        {!destinationCoords ?
+          (
+            <Button
+              mode="contained"
+              onPress={traceRoute}
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+            >
+              Search
+            </Button>
+          ) :
           <Button
             mode="contained"
-            onPress={traceRoute}
+            onPress={handleSelect}
             style={styles.button}
             labelStyle={styles.buttonLabel}
           >
-            Set Destination
+            Confirm
           </Button>
-        
+        }
+
         {distance && duration ? (
           <View>
             <Text>Distance: {distance.toFixed(2)}</Text>
             <Text>Duration: {Math.ceil(duration)} min</Text>
+            <Text>Gas price: ~ ${price.toFixed(2)}</Text>
           </View>
         ) : null}
 
