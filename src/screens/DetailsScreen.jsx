@@ -4,7 +4,7 @@ import DatePicker from 'react-native-date-picker'
 import { generateClient } from 'aws-amplify/api';
 import { createRideDetails } from '../graphql/mutations';
 import { Button, Switch, TextInput, Title, Subheading, Text } from 'react-native-paper';
-import {useRoute} from '@react-navigation/native'
+import { useRoute } from '@react-navigation/native'
 
 export function DetailsScreen({ navigation }) {
 
@@ -15,8 +15,8 @@ export function DetailsScreen({ navigation }) {
   const [byFlexible, setByFlexible] = useState("");
   const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, "")) };
 
-  const route=useRoute();
-  const destination=route.params?.selectedDestination
+  const route = useRoute();
+  const destination = route.params?.selectedDestination
 
   // CLIENT
   const client = generateClient();
@@ -56,7 +56,13 @@ export function DetailsScreen({ navigation }) {
       </Button>
 
       {/* Display Destination */}
-      {destination && <Subheading></Subheading>}
+      {destination && (
+        <>
+          <Subheading>{destination.formatted_address}</Subheading>
+          <Subheading>{destination.name}</Subheading>
+        </>
+      )}
+
 
       {/* Date and Time */}
       <View style={styles.formGroup}>
