@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import DatePicker from 'react-native-date-picker'
 import { generateClient } from 'aws-amplify/api';
 import { createRideDetails } from '../graphql/mutations';
-import { Button, Switch, TextInput, Title, Subheading } from 'react-native-paper';
-
+import { Button, Switch, TextInput, Title, Subheading, Text } from 'react-native-paper';
+import {useRoute} from '@react-navigation/native'
 
 export function DetailsScreen({ navigation }) {
 
@@ -14,14 +14,9 @@ export function DetailsScreen({ navigation }) {
   const toggleIsFlexibleSwitch = () => setIsFlexible(previousState => !previousState);
   const [byFlexible, setByFlexible] = useState("");
   const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, "")) };
-  const [unit, setUnit] = useState('mins')
-  const [destination, setDestination] = useState({})
 
-  // FUNCTIONS
-  const handleChosenDestination = (destination) => {
-    setDestination(destination)
-  }
-
+  const route=useRoute();
+  const destination=route.params?.selectedDestination
 
   // CLIENT
   const client = generateClient();
@@ -53,14 +48,15 @@ export function DetailsScreen({ navigation }) {
       {/* Choose Destination Button */}
       <Button
         mode="contained"
-        onPress={() => navigation.navigate('MapScreen', {
-          onSelect: handleChosenDestination
-        })}
+        onPress={() => navigation.navigate('MapScreen')}
         style={styles.button}
         labelStyle={styles.buttonLabel}
       >
         Choose Destination
       </Button>
+
+      {/* Display Destination */}
+      {destination && <Subheading></Subheading>}
 
       {/* Date and Time */}
       <View style={styles.formGroup}>

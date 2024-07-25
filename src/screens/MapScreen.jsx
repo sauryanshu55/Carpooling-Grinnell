@@ -70,6 +70,10 @@ export function MapScreen({ route }) {
 
   const navigation = useNavigation()
 
+  const handleConfirm = () => {
+    navigation.navigate('Details',{ selectedDestination: destination});
+  };
+
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
     if (camera) {
@@ -116,9 +120,6 @@ export function MapScreen({ route }) {
     traceRoute()
   };
 
-  const handleSelect = () => {
-    navigation.goBack();
-  };
 
   return (
     <View style={styles.container}>
@@ -167,7 +168,7 @@ export function MapScreen({ route }) {
           ) :
           <Button
             mode="contained"
-            onPress={handleSelect}
+            onPress={handleConfirm}
             style={styles.button}
             labelStyle={styles.buttonLabel}
           >
