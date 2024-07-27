@@ -1,22 +1,31 @@
 import { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import DatePicker from 'react-native-date-picker'
 import { generateClient } from 'aws-amplify/api';
 import { createRideDetails } from '../graphql/mutations';
-import { Button, Switch, TextInput, Title, Subheading, Text } from 'react-native-paper';
+import { Button, Switch, TextInput, Title, Subheading, Text, Checkbox } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native'
+
 
 export function DetailsScreen({ navigation }) {
 
   // SET STATES
   const [date, setDate] = useState(new Date())
   const [isFlexible, setIsFlexible] = useState(false)
-  const toggleIsFlexibleSwitch = () => setIsFlexible(previousState => !previousState);
   const [byFlexible, setByFlexible] = useState("");
+  const [needReturnRide, setNeedReturnRide] = useState(false);
+  const [waitTime, setWaitTime] = useState(0)
+  const [reccomendedOffer, setReccomendedOffer] = useState(null);
+
+
+  const toggleIsFlexibleSwitch = () => setIsFlexible(previousState => !previousState);
   const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, "")) };
+  const handleWaitTimeChange = (text) => { setWaitTime(text.replace(/[^0-9]/g, ""))};
 
   const route = useRoute();
   const destination = route.params?.selectedDestination
+
+  const gasPrice = 12
 
   // CLIENT
   const client = generateClient();
@@ -43,74 +52,130 @@ export function DetailsScreen({ navigation }) {
 
   // RETURN COMPONENT
   return (
-    <View style={styles.container}>
-      <Title style={styles.title}>Request a Ride</Title>
-      {/* Choose Destination Button */}
-      <Button
-        mode="contained"
-        onPress={() => navigation.navigate('MapScreen')}
-        style={styles.button}
-        labelStyle={styles.buttonLabel}
-      >
-        Choose Destination
-      </Button>
+    <ScrollView style={styles.container}>
+      <View style={styles.container}>
+        <Title style={styles.title}>Request a Ride</Title>
+        {/* Choose Destination Button */}
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('MapScreen')}
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+        >
+          Choose Destination
+        </Button>
 
-      {/* Display Destination */}
-      {destination && (
-        <>
-          <Subheading>{destination.formatted_address}</Subheading>
-          <Subheading>{destination.name}</Subheading>
-        </>
-      )}
+        {/* Display Destination */}
+        {destination && (
+          <>
+            <View style={styles.formGroup}>
+              <Subheading>{destination.formatted_address}</Subheading>
+              <Subheading>{destination.name}</Subheading>
+            </View>
+          </>
+        )}
 
 
-      {/* Date and Time */}
-      <View style={styles.formGroup}>
-        <Subheading>Select a Date and Time</Subheading>
-        <DatePicker
-          date={date}
-          onDateChange={setDate}
-          mode="datetime"
-        />
-      </View>
-
-      {/* Flexible Checkbox */}
-      <View style={styles.formGroup}>
-        <Subheading>Are you flexible with the time you're requesting?</Subheading>
-        <View style={styles.switchContainer}>
-          <Switch value={isFlexible} onValueChange={toggleIsFlexibleSwitch} />
-          <Subheading style={styles.switchLabel}>
-            {isFlexible ? 'Yes' : 'No'}
-          </Subheading>
-        </View>
-      </View>
-
-      {/* Flexible By */}
-      {isFlexible && (
+        {/* Date and Time */}
         <View style={styles.formGroup}>
-          <Subheading>By how much are you flexible?</Subheading>
-          <TextInput
-            mode="outlined"
-            onChangeText={handleByFlexibleTimeChange}
-            value={byFlexible}
-            keyboardType="numeric"
-            placeholder=" 15 mins"
-            style={styles.input}
+          <Subheading>Select a Date and Time</Subheading>
+          <DatePicker
+            date={date}
+            onDateChange={setDate}
+            mode="datetime"
           />
         </View>
-      )}
 
-      {/* Request Button */}
-      <Button
-        mode="contained"
-        onPress={save}
-        style={styles.button}
-        labelStyle={styles.buttonLabel}
-      >
-        Request Ride
-      </Button>
+        {/* Flexible Checkbox */}
+        <View style={styles.formGroup}>
+          <Subheading>Are you flexible with the time you're requesting?</Subheading>
+          <View style={styles.switchContainer}>
+            <Switch value={isFlexible} onValueChange={toggleIsFlexibleSwitch} />
+            <Subheading style={styles.switchLabel}>
+              {isFlexible ? 'Yes' : 'No'}
+            </Subheading>
+          </View>
+        </View>
 
-    </View>
+        {/* Flexible By */}
+        {isFlexible && (
+          <View style={styles.formGroup}>
+            <Subheading>By how much are you flexible?</Subheading>
+            <TextInput
+              mode="outlined"
+              onChangeText={handleByFlexibleTimeChange}
+              value={byFlexible}
+              keyboardType="numeric"
+              placeholder=" 15 mins"
+              style={styles.input}
+            />
+          </View>
+        )}
+
+        {/* Need Ride back */}
+        <View style={styles.Checkbox}>
+          {destination?.name && (
+            <>
+              <Subheading>Do you need a ride back from {destination.name}?</Subheading>
+              <Checkbox
+                status={needReturnRide ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setNeedReturnRide(!needReturnRide);
+                  setWaitTime(0)
+                }}
+              />
+            </>
+          )}
+        </View>
+
+        {/* Wait Time */}
+        <View style={styles.formGroup}>
+          {needReturnRide ?
+            <>
+              <Subheading>How many minutes to wait at {destination?.name} before heading back?</Subheading>
+              <TextInput
+                mode="outlined"
+                onChangeText={handleWaitTimeChange}
+                value={waitTime}
+                keyboardType="numeric"
+                placeholder=" 15 mins"
+                style={styles.input}
+              />
+            </>
+            : null}
+        </View>
+
+        {/* Reccommended Offer */}
+        {destination ?
+          <>
+            <Subheading>Reccomended offer</Subheading>
+            {needReturnRide ?
+              <Text>Gas Price x 2 (To and From): ${gasPrice}</Text> :
+              <Text>Gas Price: ${gasPrice}</Text>
+            }
+
+            <Text>We reccomend you offer at least ${gasPrice}.</Text>
+
+            {(waitTime > 0) ? 
+            <Text>Since you're also asking for the student to wait at {destination?.name}, please take note of their valuable time and add some gratuity! 😊</Text>
+            : null}
+          </>
+          : null}
+
+        {/* Offer */}
+
+        {/* Request Button */}
+        <Button
+          mode="contained"
+          onPress={save}
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+        >
+          Request Ride
+        </Button>
+
+      </View>
+    </ScrollView>
   );
 }
 
