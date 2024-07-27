@@ -1,38 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getTodo = /* GraphQL */ `
-  query GetTodo($id: ID!) {
-    getTodo(id: $id) {
-      id
-      name
-      description
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const listTodos = /* GraphQL */ `
-  query ListTodos(
-    $filter: ModelTodoFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listTodos(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
 export const getRideDetails = /* GraphQL */ `
   query GetRideDetails($id: ID!) {
     getRideDetails(id: $id) {
@@ -40,6 +8,17 @@ export const getRideDetails = /* GraphQL */ `
       dateTime
       isFlexible
       byFlexible
+      needReturnRide
+      waitTime
+      duration
+      offer
+      destination {
+        address
+        name
+        latitude
+        longitude
+        __typename
+      }
       createdAt
       updatedAt
       owner
@@ -59,6 +38,10 @@ export const listRideDetails = /* GraphQL */ `
         dateTime
         isFlexible
         byFlexible
+        needReturnRide
+        waitTime
+        duration
+        offer
         createdAt
         updatedAt
         owner

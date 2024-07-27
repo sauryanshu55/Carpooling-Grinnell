@@ -15,7 +15,7 @@ export function DetailsScreen({ navigation }) {
   const [byFlexible, setByFlexible] = useState("");
   const [needReturnRide, setNeedReturnRide] = useState(false);
   const [waitTime, setWaitTime] = useState(0)
-  const [offer,setOffer]=useState(0)
+  const [offer, setOffer] = useState(0)
 
   const toggleIsFlexibleSwitch = () => setIsFlexible(previousState => !previousState);
   const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, "")) };
@@ -33,12 +33,24 @@ export function DetailsScreen({ navigation }) {
   // SAVE
   const save = async () => {
     try {
+      const destinationObject = {
+        address: destination?.formatted_address,
+        name: destination?.name,
+        latitude: destination?.geometry.location.lat,
+        longitude: destination?.geometry.location.lng
+      }
+
       const rideDetails = {
         dateTime: date.toISOString(),
         isFlexible: isFlexible,
-        byFlexible: isFlexible ? parseInt(byFlexible) : null
+        byFlexible: isFlexible ? parseInt(byFlexible) : null,
+        needReturnRide: needReturnRide,
+        waitTime: needReturnRide ? parseInt(waitTime) : null,
+        duration: Math.floor(duration),
+        offer: offer,
+        destination: destinationObject
       }
-
+      console.log(rideDetails)
       const result = await client.graphql({
         query: createRideDetails,
         variables: { input: rideDetails }
@@ -177,7 +189,7 @@ export function DetailsScreen({ navigation }) {
                 onChangeText={handleOfferChange}
                 value={offer}
                 keyboardType="numeric"
-                placeholder={`$${needReturnRide ? oneWayGasPrice * 2 : oneWayGasPrice}`} 
+                placeholder={`$${needReturnRide ? oneWayGasPrice * 2 : oneWayGasPrice}`}
                 style={styles.input}
               />
               <Text>Make your fellow Grinnellian's day by offering a generous amount, more than the covering the gas😊</Text>
@@ -189,6 +201,7 @@ export function DetailsScreen({ navigation }) {
         <Button
           mode="contained"
           onPress={save}
+          disabled={!destination}
           style={styles.button}
           labelStyle={styles.buttonLabel}
         >
