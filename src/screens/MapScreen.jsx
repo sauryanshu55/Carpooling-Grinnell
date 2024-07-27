@@ -71,7 +71,7 @@ export function MapScreen({ route }) {
   const navigation = useNavigation()
 
   const handleConfirm = () => {
-    navigation.navigate('Details',{ selectedDestination: destination});
+    navigation.navigate('Details', { selectedDestination: destination, gasPrice: price, duration: duration });
   };
 
   const moveTo = async (position) => {

@@ -15,17 +15,17 @@ export function DetailsScreen({ navigation }) {
   const [byFlexible, setByFlexible] = useState("");
   const [needReturnRide, setNeedReturnRide] = useState(false);
   const [waitTime, setWaitTime] = useState(0)
-  const [reccomendedOffer, setReccomendedOffer] = useState(null);
-
+  const [offer,setOffer]=useState(0)
 
   const toggleIsFlexibleSwitch = () => setIsFlexible(previousState => !previousState);
   const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, "")) };
-  const handleWaitTimeChange = (text) => { setWaitTime(text.replace(/[^0-9]/g, ""))};
+  const handleWaitTimeChange = (text) => { setWaitTime(text.replace(/[^0-9]/g, "")) };
+  const handleOfferChange = (text) => { setOffer(text.replace(/[^0-9]/g, "")) };
 
   const route = useRoute();
   const destination = route.params?.selectedDestination
-
-  const gasPrice = 12
+  const oneWayGasPrice = route.params?.gasPrice.toFixed(2)
+  const duration = route.params?.duration
 
   // CLIENT
   const client = generateClient();
@@ -121,7 +121,7 @@ export function DetailsScreen({ navigation }) {
                 status={needReturnRide ? 'checked' : 'unchecked'}
                 onPress={() => {
                   setNeedReturnRide(!needReturnRide);
-                  setWaitTime(0)
+                  setWaitTime(0);
                 }}
               />
             </>
@@ -150,19 +150,40 @@ export function DetailsScreen({ navigation }) {
           <>
             <Subheading>Reccomended offer</Subheading>
             {needReturnRide ?
-              <Text>Gas Price x 2 (To and From): ${gasPrice}</Text> :
-              <Text>Gas Price: ${gasPrice}</Text>
+              <>
+                <Text>Gas Price x 2 (To and From): ${oneWayGasPrice * 2}</Text>
+                <Text>We reccomend you offer at least ${oneWayGasPrice * 2}.</Text>
+              </>
+              :
+              <>
+                <Text>Gas Price: ${oneWayGasPrice}</Text>
+                <Text>We reccomend you offer at least ${oneWayGasPrice}.</Text>
+              </>
             }
 
-            <Text>We reccomend you offer at least ${gasPrice}.</Text>
-
-            {(waitTime > 0) ? 
-            <Text>Since you're also asking for the student to wait at {destination?.name}, please take note of their valuable time and add some gratuity! 😊</Text>
-            : null}
+            {(waitTime > 0) ?
+              <Text>Since you're also asking for the student to wait at {destination?.name}, please take note of their valuable time and add some gratuity! 😊</Text>
+              : null}
           </>
           : null}
 
         {/* Offer */}
+        <View style={styles.formGroup}>
+          {destination ?
+            <>
+              <Subheading>How much are you offering to pay?</Subheading>
+              <TextInput
+                mode="outlined"
+                onChangeText={handleOfferChange}
+                value={offer}
+                keyboardType="numeric"
+                placeholder={`$${needReturnRide ? oneWayGasPrice * 2 : oneWayGasPrice}`} 
+                style={styles.input}
+              />
+              <Text>Make your fellow Grinnellian's day by offering a generous amount, more than the covering the gas😊</Text>
+            </>
+            : null}
+        </View>
 
         {/* Request Button */}
         <Button
