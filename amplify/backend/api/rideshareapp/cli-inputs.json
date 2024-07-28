@@ -1,18 +1,18 @@
 {
   "version": 1,
   "serviceConfiguration": {
-    "apiName": "rideshare",
+    "apiName": "rideshareapp",
     "serviceName": "AppSync",
     "defaultAuthType": {
       "mode": "AMAZON_COGNITO_USER_POOLS",
-      "cognitoUserPoolId": "authrideshareappabe98b84"
+      "cognitoUserPoolId": "authrideshareapp7da6e5b8"
     },
     "additionalAuthTypes": [
       {
         "mode": "API_KEY",
-        "expirationTime": 7,
-        "apiKeyExpirationDate": "2024-07-20T17:01:58.036Z",
-        "keyDescription": ""
+        "expirationTime": 365,
+        "apiKeyExpirationDate": "2025-07-28T23:01:34.527Z",
+        "keyDescription": "RideshareApiKey"
       }
     ]
   }
