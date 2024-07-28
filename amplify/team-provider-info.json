@@ -9,14 +9,23 @@
       "UnauthRoleName": "amplify-rideshareapp-dev-8b121-unauthRole",
       "StackName": "amplify-rideshareapp-dev-8b121",
       "StackId": "arn:aws:cloudformation:us-east-2:767397689678:stack/amplify-rideshareapp-dev-8b121/d1b6c590-3bf4-11ef-a163-067828334ad1",
-      "AmplifyAppId": "d2v5qlewhivrsd"
+      "AmplifyAppId": "d2v5qlewhivrsd",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-rideshareapp-dev-8b121-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "rideshareappabe98b84": {}
+        "rideshareappe0a8ae68": {},
+        "rideshareapp7da6e5b8": {}
+      },
+      "function": {
+        "rideshareapp7da6e5b8PreSignup": {
+          "DOMAINALLOWLIST": "grinnell.edu",
+          "deploymentBucketName": "amplify-rideshareapp-dev-8b121-deployment",
+          "s3Key": "amplify-builds/rideshareapp7da6e5b8PreSignup-36504c54454634504737-build.zip"
+        }
       },
       "api": {
-        "rideshare": {}
+        "rideshareapp": {}
       }
     }
   }

@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "rideshareappabe98b84_identitypool_abe98b84",
+    "identityPoolName": "rideshareapp7da6e5b8_identitypool_7da6e5b8",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "rideshabe98b84",
-    "userPoolName": "rideshareappabe98b84_userpool_abe98b84",
+    "resourceNameTruncated": "ridesh7da6e5b8",
+    "userPoolName": "rideshareapp7da6e5b8_userpool_7da6e5b8",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -20,7 +20,9 @@
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
-      "email"
+      "email",
+      "name",
+      "phone_number"
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
@@ -31,16 +33,20 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "rideshabe98b84_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "ridesh7da6e5b8_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "abe98b84",
-    "resourceName": "rideshareappabe98b84",
+    "sharedId": "7da6e5b8",
+    "resourceName": "rideshareapp7da6e5b8",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
     "usernameAttributes": [
       "email"
     ],
-    "triggers": {},
+    "triggers": {
+      "PreSignup": [
+        "email-filter-allowlist"
+      ]
+    },
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,

@@ -1,13 +1,13 @@
 {
   "api": {
-    "rideshare": {
+    "rideshareapp": {
       "dependsOn": [
         {
           "attributes": [
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "rideshareappabe98b84"
+          "resourceName": "rideshareapp7da6e5b8"
         }
       ],
       "output": {
@@ -15,9 +15,9 @@
           "additionalAuthenticationProviders": [
             {
               "apiKeyConfig": {
-                "apiKeyExpirationDate": "2024-07-20T17:01:58.036Z",
-                "apiKeyExpirationDays": 7,
-                "description": ""
+                "apiKeyExpirationDate": "2025-07-28T23:01:34.527Z",
+                "apiKeyExpirationDays": 365,
+                "description": "RideshareApiKey"
               },
               "authenticationType": "API_KEY"
             }
@@ -25,7 +25,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authrideshareappabe98b84"
+              "userPoolId": "authrideshareapp7da6e5b8"
             }
           }
         }
@@ -35,9 +35,19 @@
     }
   },
   "auth": {
-    "rideshareappabe98b84": {
+    "rideshareapp7da6e5b8": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "rideshareapp7da6e5b8PreSignup",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -48,7 +58,9 @@
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
-          "EMAIL"
+          "EMAIL",
+          "NAME",
+          "PHONE_NUMBER"
         ],
         "socialProviders": [],
         "usernameAttributes": [
@@ -60,6 +72,39 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "rideshareapp7da6e5b8PreSignup": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_rideshareapp7da6e5b8PreSignup_DOMAINALLOWLIST": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "rideshareapp7da6e5b8PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_rideshareapp7da6e5b8PreSignup_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "rideshareapp7da6e5b8PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_rideshareapp7da6e5b8PreSignup_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "rideshareapp7da6e5b8PreSignup"
+        }
+      ]
     }
   }
 }
