@@ -15,13 +15,13 @@
     "categories": {
       "auth": {
         "rideshareappe0a8ae68": {},
-        "rideshareapp7da6e5b8": {}
+        "rideshareappece1e729": {}
       },
       "function": {
-        "rideshareapp7da6e5b8PreSignup": {
+        "rideshareappece1e729PreSignup": {
           "DOMAINALLOWLIST": "grinnell.edu",
           "deploymentBucketName": "amplify-rideshareapp-dev-8b121-deployment",
-          "s3Key": "amplify-builds/rideshareapp7da6e5b8PreSignup-36504c54454634504737-build.zip"
+          "s3Key": "amplify-builds/rideshareappece1e729PreSignup-544e497175536d697879-build.zip"
         }
       },
       "api": {

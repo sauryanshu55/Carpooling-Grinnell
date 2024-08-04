@@ -7,25 +7,16 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "rideshareapp7da6e5b8"
+          "resourceName": "rideshareappece1e729"
         }
       ],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "apiKeyConfig": {
-                "apiKeyExpirationDate": "2025-07-28T23:01:34.527Z",
-                "apiKeyExpirationDays": 365,
-                "description": "RideshareApiKey"
-              },
-              "authenticationType": "API_KEY"
-            }
-          ],
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authrideshareapp7da6e5b8"
+              "userPoolId": "authrideshareappece1e729"
             }
           }
         }
@@ -35,7 +26,7 @@
     }
   },
   "auth": {
-    "rideshareapp7da6e5b8": {
+    "rideshareappece1e729": {
       "customAuth": false,
       "dependsOn": [
         {
@@ -44,7 +35,7 @@
             "Name"
           ],
           "category": "function",
-          "resourceName": "rideshareapp7da6e5b8PreSignup",
+          "resourceName": "rideshareappece1e729PreSignup",
           "triggerProvider": "Cognito"
         }
       ],
@@ -75,34 +66,34 @@
     }
   },
   "function": {
-    "rideshareapp7da6e5b8PreSignup": {
+    "rideshareappece1e729PreSignup": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
   "parameters": {
-    "AMPLIFY_function_rideshareapp7da6e5b8PreSignup_DOMAINALLOWLIST": {
+    "AMPLIFY_function_rideshareappece1e729PreSignup_DOMAINALLOWLIST": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "rideshareapp7da6e5b8PreSignup"
+          "resourceName": "rideshareappece1e729PreSignup"
         }
       ]
     },
-    "AMPLIFY_function_rideshareapp7da6e5b8PreSignup_deploymentBucketName": {
+    "AMPLIFY_function_rideshareappece1e729PreSignup_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "rideshareapp7da6e5b8PreSignup"
+          "resourceName": "rideshareappece1e729PreSignup"
         }
       ]
     },
-    "AMPLIFY_function_rideshareapp7da6e5b8PreSignup_s3Key": {
+    "AMPLIFY_function_rideshareappece1e729PreSignup_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "rideshareapp7da6e5b8PreSignup"
+          "resourceName": "rideshareappece1e729PreSignup"
         }
       ]
     }

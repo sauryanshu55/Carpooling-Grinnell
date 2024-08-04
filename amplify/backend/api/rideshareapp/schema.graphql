@@ -18,6 +18,8 @@ type RideDetails
   duration: Int!
   offer: Float!
   destination: Location!
+  user: User!
+  rideStatus: Int!
 }
 
 type Location {
@@ -25,4 +27,11 @@ type Location {
  name: String
  latitude: Float!
  longitude: Float!
+}
+
+type User  {
+  name: String!
+  email: String!
+  phoneNumber: String!
+  sub: String!
 }

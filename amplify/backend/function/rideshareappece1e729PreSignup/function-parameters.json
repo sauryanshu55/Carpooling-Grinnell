@@ -3,14 +3,14 @@
   "modules": [
     "email-filter-allowlist"
   ],
-  "parentResource": "rideshareapp7da6e5b8",
-  "functionName": "rideshareapp7da6e5b8PreSignup",
-  "resourceName": "rideshareapp7da6e5b8PreSignup",
+  "parentResource": "rideshareappece1e729",
+  "functionName": "rideshareappece1e729PreSignup",
+  "resourceName": "rideshareappece1e729PreSignup",
   "parentStack": "auth",
   "triggerEnvs": "[]",
   "triggerDir": "C:\\snapshot\\amplify-cli\\build\\node_modules\\@aws-amplify\\amplify-category-auth\\provider-utils\\awscloudformation\\triggers\\PreSignup",
   "triggerTemplate": "PreSignup.json.ejs",
   "triggerEventPath": "PreSignup.event.json",
-  "roleName": "rideshareapp7da6e5b8PreSignup",
+  "roleName": "rideshareappece1e729PreSignup",
   "skipEdit": true
 }

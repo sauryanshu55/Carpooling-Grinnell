@@ -5,6 +5,15 @@ import { generateClient } from 'aws-amplify/api';
 import { createRideDetails } from '../graphql/mutations';
 import { Button, Switch, TextInput, Title, Subheading, Text, Checkbox } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native'
+import { fetchUserAttributes } from 'aws-amplify/auth';
+
+
+export const RideStatus = {
+  IDLE: 1,
+  CONTENTIOUS: 2,
+  TAKEN: 3,
+  DELETED: -1
+}
 
 
 export function DetailsScreen({ navigation }) {
@@ -16,16 +25,25 @@ export function DetailsScreen({ navigation }) {
   const [needReturnRide, setNeedReturnRide] = useState(false);
   const [waitTime, setWaitTime] = useState(0)
   const [offer, setOffer] = useState(0)
+  const [userDetails, setUserDetails] = useState({})
 
   const toggleIsFlexibleSwitch = () => setIsFlexible(previousState => !previousState);
-  const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, "")) };
-  const handleWaitTimeChange = (text) => { setWaitTime(text.replace(/[^0-9]/g, "")) };
-  const handleOfferChange = (text) => { setOffer(text.replace(/[^0-9]/g, "")) };
+  const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, "")) }
+  const handleWaitTimeChange = (text) => { setWaitTime(text.replace(/[^0-9]/g, "")) }
+  const handleOfferChange = (text) => { setOffer(text.replace(/[^0-9]/g, "")) }
 
   const route = useRoute();
   const destination = route.params?.selectedDestination
   const oneWayGasPrice = route.params?.gasPrice.toFixed(2)
   const duration = route.params?.duration
+
+  let userInfo;
+  fetchUserAttributes().then(data => {
+    userInfo = { ...data }
+    setUserDetails(userInfo)
+  }).catch(error => {
+    console.log("Failed to extract user details:", Error)
+  })
 
   // CLIENT
   const client = generateClient();
@@ -40,6 +58,13 @@ export function DetailsScreen({ navigation }) {
         longitude: destination?.geometry.location.lng
       }
 
+      const user={
+        email: userDetails.email,
+        name: userDetails.name,
+        phoneNumber:userDetails.phone_number,
+        sub: userDetails.sub
+      }
+      
       const rideDetails = {
         dateTime: date.toISOString(),
         isFlexible: isFlexible,
@@ -48,8 +73,11 @@ export function DetailsScreen({ navigation }) {
         waitTime: needReturnRide ? parseInt(waitTime) : null,
         duration: Math.floor(duration),
         offer: offer,
-        destination: destinationObject
+        destination: destinationObject,
+        user: user,
+        rideStatus: RideStatus.IDLE,
       }
+
       console.log(rideDetails)
       const result = await client.graphql({
         query: createRideDetails,
@@ -58,7 +86,7 @@ export function DetailsScreen({ navigation }) {
 
       console.log("SAVED")
     } catch (error) {
-      console.log("ERROR: " + error)
+      console.log(error)
     }
   }
 

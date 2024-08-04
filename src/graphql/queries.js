@@ -19,6 +19,14 @@ export const getRideDetails = /* GraphQL */ `
         longitude
         __typename
       }
+      user {
+        name
+        email
+        phoneNumber
+        sub
+        __typename
+      }
+      rideStatus
       createdAt
       updatedAt
       owner
@@ -42,6 +50,7 @@ export const listRideDetails = /* GraphQL */ `
         waitTime
         duration
         offer
+        rideStatus
         createdAt
         updatedAt
         owner

@@ -22,6 +22,14 @@ export const createRideDetails = /* GraphQL */ `
         longitude
         __typename
       }
+      user {
+        name
+        email
+        phoneNumber
+        sub
+        __typename
+      }
+      rideStatus
       createdAt
       updatedAt
       owner
@@ -50,6 +58,14 @@ export const updateRideDetails = /* GraphQL */ `
         longitude
         __typename
       }
+      user {
+        name
+        email
+        phoneNumber
+        sub
+        __typename
+      }
+      rideStatus
       createdAt
       updatedAt
       owner
@@ -78,6 +94,14 @@ export const deleteRideDetails = /* GraphQL */ `
         longitude
         __typename
       }
+      user {
+        name
+        email
+        phoneNumber
+        sub
+        __typename
+      }
+      rideStatus
       createdAt
       updatedAt
       owner

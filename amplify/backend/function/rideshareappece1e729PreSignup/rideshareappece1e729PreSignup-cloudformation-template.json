@@ -71,12 +71,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "rideshareapp7da6e5b8PreSignup",
+            "rideshareappece1e729PreSignup",
             {
               "Fn::Join": [
                 "",
                 [
-                  "rideshareapp7da6e5b8PreSignup",
+                  "rideshareappece1e729PreSignup",
                   "-",
                   {
                     "Ref": "env"
@@ -129,12 +129,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "rideshareapp7da6e5b8PreSignup",
+            "rideshareappece1e729PreSignup",
             {
               "Fn::Join": [
                 "",
                 [
-                  "rideshareapp7da6e5b8PreSignup",
+                  "rideshareappece1e729PreSignup",
                   "-",
                   {
                     "Ref": "env"
