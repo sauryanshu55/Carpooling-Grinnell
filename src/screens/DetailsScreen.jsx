@@ -58,13 +58,13 @@ export function DetailsScreen({ navigation }) {
         longitude: destination?.geometry.location.lng
       }
 
-      const user={
+      const user = {
         email: userDetails.email,
         name: userDetails.name,
-        phoneNumber:userDetails.phone_number,
+        phoneNumber: userDetails.phone_number,
         sub: userDetails.sub
       }
-      
+
       const rideDetails = {
         dateTime: date.toISOString(),
         isFlexible: isFlexible,
