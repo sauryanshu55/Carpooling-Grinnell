@@ -1,9 +1,10 @@
 import { View, Text, FlatList } from 'react-native'
-import { AddButton } from './ButtonUtilties'
+import { AddButton } from './components/ButtonUtilties'
 import { useState, useEffect } from 'react';
 import { listRideDetails } from '../graphql/queries';
 import { generateClient } from 'aws-amplify/api';
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
+import {MaterialCardWithImageAndTitle} from './components/RideCard'
 
 export function HomeScreen({ navigation }) {
   // SET STATES AND HOOKS
@@ -58,6 +59,7 @@ export function HomeScreen({ navigation }) {
 
   return (
     <PaperProvider theme={theme}>
+      <MaterialCardWithImageAndTitle/>
       <View style={{ flex: 1, justifyContent: 'center' }}>
         <AddButton />
       </View>
