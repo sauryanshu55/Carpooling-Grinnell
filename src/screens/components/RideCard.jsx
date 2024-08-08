@@ -1,200 +1,136 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import MaterialChipBasic from "./Chip";
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { MapPin, Clock } from 'lucide-react-native';
 
-export function MaterialCardWithImageAndTitle(props) {
+export const RideOfferCard = ({ date, time, location, price, requestedBy, duration, additionalInfo }) => {
   return (
-    <View style={[styles.container, props.style]}>
-      <View style={styles.cardBody}>
-        <View style={styles.bodyContent}>
-          <Text style={styles.march27230Pm}>March 27, 2:30 PM</Text>
-          <Text style={styles.subtitleHere}>
-            Walmart, 1127 E Street, West Des Moines
-          </Text>
+    <View style={styles.card}>
+      <View style={styles.header}>
+        <View style={styles.interestBadge}>
+          <Text style={styles.interestText}>Multiple people have expressed interest</Text>
         </View>
       </View>
-      <View style={styles.actionBody}>
-        <TouchableOpacity
-          onPress={() => console.log("Navigate to Untitled")}
-          style={styles.button}
-        >
-          <Text style={styles.offerToDrive}>Offer to Drive</Text>
-        </TouchableOpacity>
+
+      <View style={styles.dateTimeContainer}>
+        <Text style={styles.dateTime}>{`${date}\n${time}`}</Text>
+        <Text style={styles.flexibleText}>Flexible with time ± 15 mins</Text>
       </View>
-      <Text style={styles.loremIpsum}>$18.5</Text>
-      <Text style={styles.toAndFrom}>To and From</Text>
-      <Text style={styles.flexible1}>Wait at stop for 30 mins</Text>
-      <Text style={styles.requestedBy}>Requested By</Text>
-      <Text style={styles.johnDoe}>John Doe</Text>
-      <MaterialChipBasic style={styles.materialChipBasic}></MaterialChipBasic>
+
+      <View style={styles.locationContainer}>
+        <MapPin size={16} color="#666" />
+        <Text style={styles.location} numberOfLines={2} ellipsizeMode="tail">{location}</Text>
+      </View>
+
+      <Text style={styles.price}>${price}</Text>
+
+      <View style={styles.infoContainer}>
+        <View style={styles.infoItem}>
+          <Clock size={16} color="#666" />
+          <Text style={styles.infoText}>{duration}</Text>
+        </View>
+        <Text style={styles.additionalInfo}>{additionalInfo}</Text>
+      </View>
+
+      <TouchableOpacity style={styles.offerButton}>
+        <Text style={styles.offerButtonText}>Offer to Drive</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.requestedBy}>Requested By: {requestedBy}</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    borderRadius: 2,
-    flexWrap: "nowrap",
-    backgroundColor: "#FFF",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: -2,
-      height: 2
-    },
-    shadowOpacity: 0.21,
-    shadowRadius: 1.5,
-    elevation: 3,
-    overflow: "hidden",
-    borderWidth: 0,
-    borderColor: "#000000"
-  },
-  cardBody: {
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  bodyContent: {
+  card: {
+    backgroundColor: 'white',
+    borderRadius: 8,
     padding: 16,
-    paddingTop: 24,
-    height: 102,
-    width: 359
+    margin: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  march27230Pm: {
-    fontSize: 18,
-    color: "#000",
-    paddingBottom: 12
+  header: {
+    alignItems: 'flex-end',
+    marginBottom: 8,
   },
-  subtitleHere: {
-    fontSize: 11,
-    color: "#000",
-    lineHeight: 16,
-    opacity: 0.5,
-    width: 153,
-    height: 14
+  interestBadge: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 16,
+    padding: 4,
   },
-  actionBody: {
-    padding: 8,
-    flexDirection: "row",
-    width: 353,
-    height: 58
-  },
-  button: {
-    padding: 8,
-    height: 27,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#000000",
-    borderStyle: "solid",
-    shadowColor: "rgba(189,16,224,1)",
-    shadowOffset: {
-      width: 3,
-      height: 3
-    },
-    elevation: 5,
-    shadowOpacity: 0.29,
-    shadowRadius: 0,
-    width: 81
-  },
-  offerToDrive: {
+  interestText: {
     fontSize: 10,
-    color: "#000",
-    opacity: 0.9
+    color: '#666',
   },
-  loremIpsum: {
-    top: 40,
-    left: 242,
-    position: "absolute",
-    fontFamily: "roboto-700",
-    color: "rgba(155,155,155,1)",
-    fontSize: 37,
-    width: 108,
-    height: 48
+  dateTimeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
   },
-  ellipse: {
-    top: 98,
-    left: 18,
-    width: 9,
-    height: 8,
-    position: "absolute",
-    opacity: 0.42
+  dateTime: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
-  flexible: {
-    top: 98,
-    left: 30,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "rgba(74,74,74,1)",
-    height: 8,
-    width: 43,
-    fontSize: 7
+  flexibleText: {
+    fontSize: 12,
+    color: '#666',
+    maxWidth: '50%',
+    textAlign: 'right',
   },
-  ellipse1: {
-    top: 98,
-    left: 143,
-    width: 9,
-    height: 8,
-    position: "absolute",
-    opacity: 0.42
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
   },
-  ellipse2: {
-    top: 98,
-    left: 75,
-    width: 9,
-    height: 8,
-    position: "absolute",
-    opacity: 0.42
+  location: {
+    fontSize: 14,
+    color: '#333',
+    marginLeft: 8,
+    flex: 1,
   },
-  toAndFrom: {
-    top: 98,
-    left: 89,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "rgba(74,74,74,1)",
-    height: 8,
-    width: 43,
-    fontSize: 7
+  price: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 12,
   },
-  flexible1: {
-    top: 98,
-    left: 156,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "rgba(74,74,74,1)",
-    height: 8,
-    width: 87,
-    fontSize: 7
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  infoItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#666',
+    marginLeft: 8,
+  },
+  additionalInfo: {
+    fontSize: 14,
+    color: '#666',
+  },
+  offerButton: {
+    backgroundColor: '#000',
+    borderRadius: 4,
+    padding: 12,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  offerButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   requestedBy: {
-    top: 120,
-    left: 287,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "rgba(155,155,155,1)",
-    height: 13,
-    width: 67,
-    fontSize: 10,
-    textAlign: "right"
+    fontSize: 12,
+    color: '#666',
+    textAlign: 'center',
   },
-  johnDoe: {
-    top: 137,
-    left: 200,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    height: 19,
-    width: 151,
-    textAlign: "right",
-    fontSize: 15
-  },
-  materialChipBasic: {
-    width: 173,
-    height: 24,
-    position: "absolute",
-    left: 183,
-    top: 5,
-    borderWidth: 1,
-    borderColor: "rgba(189,16,224,1)",
-    borderStyle: "solid"
-  }
 });
-
-export default MaterialCardWithImageAndTitle;

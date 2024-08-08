@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { listRideDetails } from '../graphql/queries';
 import { generateClient } from 'aws-amplify/api';
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
-import {MaterialCardWithImageAndTitle} from './components/RideCard'
+import { RideOfferCard } from './components/RideCard'
 
 export function HomeScreen({ navigation }) {
   // SET STATES AND HOOKS
@@ -59,7 +59,16 @@ export function HomeScreen({ navigation }) {
 
   return (
     <PaperProvider theme={theme}>
-      <MaterialCardWithImageAndTitle/>
+
+      <RideOfferCard
+        date="March 27"
+        time="2:30 PM"
+        location="Walmart, 1127 E Street, West Des Moines"
+        price="18.5"
+        requestedBy="Arnold Swarchznegger"
+        duration="45 mins"
+        additionalInfo="To and From"
+      />
       <View style={{ flex: 1, justifyContent: 'center' }}>
         <AddButton />
       </View>
