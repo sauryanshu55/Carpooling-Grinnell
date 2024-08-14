@@ -2,39 +2,50 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MapPin, Clock } from 'lucide-react-native';
 
-export const RideOfferCard = ({ date, time, location, price, requestedBy, duration, additionalInfo }) => {
+export const RideCard = ({ date, time, location, price, requestedBy, duration, flexibleBy, additionalInfo }) => {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
+
+        {/* Interest Badge */}
         <View style={styles.interestBadge}>
           <Text style={styles.interestText}>Multiple people have expressed interest</Text>
         </View>
+
       </View>
 
+      {/* Date and Time */}
       <View style={styles.dateTimeContainer}>
         <Text style={styles.dateTime}>{`${date}\n${time}`}</Text>
-        <Text style={styles.flexibleText}>Flexible with time ± 15 mins</Text>
+        <Text style={styles.flexibleText}>{flexibleBy}</Text>
       </View>
 
+      {/* Destination */}
       <View style={styles.locationContainer}>
         <MapPin size={16} color="#666" />
         <Text style={styles.location} numberOfLines={2} ellipsizeMode="tail">{location}</Text>
       </View>
 
+      {/* Offer */}
       <Text style={styles.price}>${price}</Text>
 
       <View style={styles.infoContainer}>
         <View style={styles.infoItem}>
+
+          {/* Duration  */}
           <Clock size={16} color="#666" />
-          <Text style={styles.infoText}>{duration}</Text>
+          <Text style={styles.infoText}>{duration} mins</Text>
+
         </View>
-        <Text style={styles.additionalInfo}>{additionalInfo}</Text>
+        <Text style={styles.additionalInfo}> {additionalInfo}</Text>
       </View>
 
+      {/* Offer to Drive */}
       <TouchableOpacity style={styles.offerButton}>
         <Text style={styles.offerButtonText}>Offer to Drive</Text>
       </TouchableOpacity>
 
+      {/* Requested By */}
       <Text style={styles.requestedBy}>Requested By: {requestedBy}</Text>
     </View>
   );

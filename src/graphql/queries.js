@@ -61,3 +61,39 @@ export const listRideDetails = /* GraphQL */ `
     }
   }
 `;
+
+export const listIdleRides= 
+`
+query MyQuery {
+  listRideDetails(filter: {rideStatus: {eq: 1}}) {
+    items {
+      byFlexible
+      dateTime
+      createdAt
+      duration
+      id
+      isFlexible
+      needReturnRide
+      offer
+      owner
+      rideStatus
+      updatedAt
+      waitTime
+      user {
+        email
+        name
+        phoneNumber
+        sub
+      }
+      destination {
+        address
+        latitude
+        longitude
+        name
+      }
+    }
+    nextToken
+  }
+}
+
+`

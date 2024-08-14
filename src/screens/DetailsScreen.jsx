@@ -19,30 +19,30 @@ export const RideStatus = {
 export function DetailsScreen({ navigation }) {
 
   // SET STATES
-  const [date, setDate] = useState(new Date())
-  const [isFlexible, setIsFlexible] = useState(false)
+  const [date, setDate] = useState(new Date());
+  const [isFlexible, setIsFlexible] = useState(false);
   const [byFlexible, setByFlexible] = useState("");
   const [needReturnRide, setNeedReturnRide] = useState(false);
-  const [waitTime, setWaitTime] = useState(0)
-  const [offer, setOffer] = useState(0)
-  const [userDetails, setUserDetails] = useState({})
+  const [waitTime, setWaitTime] = useState(0);
+  const [offer, setOffer] = useState(0);
+  const [userDetails, setUserDetails] = useState({});
 
   const toggleIsFlexibleSwitch = () => setIsFlexible(previousState => !previousState);
-  const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, "")) }
-  const handleWaitTimeChange = (text) => { setWaitTime(text.replace(/[^0-9]/g, "")) }
-  const handleOfferChange = (text) => { setOffer(text.replace(/[^0-9]/g, "")) }
+  const handleByFlexibleTimeChange = (text) => { setByFlexible(text.replace(/[^0-9]/g, "")) };
+  const handleWaitTimeChange = (text) => { setWaitTime(text.replace(/[^0-9]/g, "")) };
+  const handleOfferChange = (text) => { setOffer(text.replace(/[^0-9]/g, "")) };
 
   const route = useRoute();
-  const destination = route.params?.selectedDestination
-  const oneWayGasPrice = route.params?.gasPrice.toFixed(2)
-  const duration = route.params?.duration
+  const destination = route.params?.selectedDestination;
+  const oneWayGasPrice = route.params?.gasPrice.toFixed(2);
+  const duration = route.params?.duration;
 
   let userInfo;
   fetchUserAttributes().then(data => {
-    userInfo = { ...data }
-    setUserDetails(userInfo)
+    userInfo = { ...data };
+    setUserDetails(userInfo);
   }).catch(error => {
-    console.log("Failed to extract user details:", Error)
+    console.log("Failed to extract user details:", Error);
   })
 
   // CLIENT
@@ -56,14 +56,14 @@ export function DetailsScreen({ navigation }) {
         name: destination?.name,
         latitude: destination?.geometry.location.lat,
         longitude: destination?.geometry.location.lng
-      }
+      };
 
       const user = {
         email: userDetails.email,
         name: userDetails.name,
         phoneNumber: userDetails.phone_number,
         sub: userDetails.sub
-      }
+      };
 
       const rideDetails = {
         dateTime: date.toISOString(),
@@ -76,17 +76,17 @@ export function DetailsScreen({ navigation }) {
         destination: destinationObject,
         user: user,
         rideStatus: RideStatus.IDLE,
-      }
+      };
 
-      console.log(rideDetails)
+      console.log(rideDetails);
       const result = await client.graphql({
         query: createRideDetails,
         variables: { input: rideDetails }
-      })
+      });
 
-      console.log("SAVED")
+      console.log("SAVED");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
