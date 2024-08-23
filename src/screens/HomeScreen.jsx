@@ -44,8 +44,8 @@ export function HomeScreen({ navigation }) {
           {rides.map((ride, index) => (
             <RideCard
               key={index}
-              date=""
-              time=""
+              date={formatDateTime(ride.dateTime).date}
+              time={formatDateTime(ride.dateTime).time}
               location={
                 (ride.destination.address.toLowerCase().slice(0,5) == ride.destination.name.toLowerCase().slice(0,5) ?
                   ride.destination.address 
@@ -82,21 +82,23 @@ const theme = {
   },
 };
 
-function formatDateTime(datetime) {
-  const optionsDate = { month: 'long', day: 'numeric' };
-  const optionsTime = { hour: 'numeric', minute: 'numeric' };
+function formatDateTime(dateTimeString) {
+  const date = new Date(dateTimeString);
 
-  const formattedDate = datetime.toLocaleDateString('en-US', optionsDate)
-    .replace(/(\d+)/, (match) => {
-      const day = parseInt(match);
-      const suffix = 
-        day === 1 ? 'st' :
-        day === 2 ? 'nd' :
-        day === 3 ? 'rd' : 'th';
-      return match + suffix;
-    });
+  const dayOfMonth = date.getDate();
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const monthName = monthNames[date.getMonth()];
 
-  const formattedTime = datetime.toLocaleTimeString('en-US', optionsTime);
+  let hours = date.getHours();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; 
+
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+
+  const formattedDate = `${monthName} ${dayOfMonth}`;
+  const formattedTime = `${hours}:${minutes} ${ampm}`;
 
   return { date: formattedDate, time: formattedTime };
 }
+
