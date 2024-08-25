@@ -1,8 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { MapPin, Clock } from 'lucide-react-native';
 
+
+
 export const RideCard = ({ date, time, location, price, requestedBy, duration, flexibleBy, additionalInfo }) => {
+  
+  const handleOfferToDrive = () => {
+    const recipient = requestedBy.email;
+    const subject = 'Offer to Drive';
+    const body = `Hi ${requestedBy.name.trim().split(/\s+/)[0]},\n I'd be willing to drive you to ${location}`;
+
+    const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    Linking.openURL(mailtoUrl).catch((err) => console.error('An error occurred', err));
+  };
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -41,12 +54,12 @@ export const RideCard = ({ date, time, location, price, requestedBy, duration, f
       </View>
 
       {/* Offer to Drive */}
-      <TouchableOpacity style={styles.offerButton}>
+      <TouchableOpacity style={styles.offerButton} onPress={handleOfferToDrive}>
         <Text style={styles.offerButtonText}>Offer to Drive</Text>
       </TouchableOpacity>
 
       {/* Requested By */}
-      <Text style={styles.requestedBy}>Requested By: {requestedBy}</Text>
+      <Text style={styles.requestedBy}>Requested By: {requestedBy.name}</Text>
     </View>
   );
 };

@@ -47,14 +47,14 @@ export function HomeScreen({ navigation }) {
               date={formatDateTime(ride.dateTime).date}
               time={formatDateTime(ride.dateTime).time}
               location={
-                (ride.destination.address.toLowerCase().slice(0,5) == ride.destination.name.toLowerCase().slice(0,5) ?
-                  ride.destination.address 
+                (ride.destination.address.toLowerCase().slice(0, 5) == ride.destination.name.toLowerCase().slice(0, 5) ?
+                  ride.destination.address
                   :
                   `${ride.destination.name}\n${ride.destination.address}`
                 )
               }
               price={ride.offer}
-              requestedBy={ride.user.name}
+              requestedBy={ride.user}
               duration={ride.duration}
               additionalInfo={ride.needReturnRide ? `Need ride back to Grinnll. \n Wait at stop for ${ride.waitTime} mins.` : ""}
               flexibleBy={ride.isFlexible ? `Flexible with time ± ${ride.byFlexible} mins` : ``}
@@ -92,7 +92,7 @@ function formatDateTime(dateTimeString) {
   let hours = date.getHours();
   const ampm = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12;
-  hours = hours ? hours : 12; 
+  hours = hours ? hours : 12;
 
   const minutes = date.getMinutes().toString().padStart(2, '0');
 
