@@ -10,9 +10,7 @@ export const RideCard = ({ date, time, location, price, requestedBy, duration, f
     const recipient = requestedBy.email;
     const subject = 'Offer to Drive';
     const body = `Hi ${requestedBy.name.trim().split(/\s+/)[0]},\n I'd be willing to drive you to ${location}`;
-
     const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
     Linking.openURL(mailtoUrl).catch((err) => console.error('An error occurred', err));
   };
 

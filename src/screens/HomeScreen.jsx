@@ -1,10 +1,11 @@
-import { View, Text, ScrollView } from 'react-native'
-import { AddButton } from './components/ButtonUtilties'
-import { useState, useEffect } from 'react';
+import { View, Text, ScrollView } from 'react-native';
+import { AddButton } from './components/ButtonUtilties';
+import { useState, useCallback, useEffect } from 'react';
 import { listIdleRides } from '../graphql/queries';
 import { generateClient } from 'aws-amplify/api';
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
-import { RideCard } from './components/RideCard'
+import { RideCard } from './components/RideCard';
+import { useFocusEffect } from '@react-navigation/native';
 
 export function HomeScreen({ navigation }) {
   // SET STATES AND HOOKS
@@ -15,24 +16,27 @@ export function HomeScreen({ navigation }) {
   const client = generateClient();
 
   // FETCH RIDES
-  useEffect(() => {
-    async function fetchRides() {
-      try {
-        const rideData = await client.graphql({
-          query: listIdleRides,
-        });
-        console.log(rideData)
-        setRides(rideData.data.listRideDetails.items)
-      }
-      catch (error) {
-        console.log(error);
-
-      } finally {
-        setLoading(false);
-      }
+  const fetchRides = useCallback(async () => {
+    setLoading(true);
+    try {
+      const rideData = await client.graphql({
+        query: listIdleRides,
+      });
+      console.log(rideData)
+      setRides(rideData.data.listRideDetails.items)
     }
-    fetchRides();
+    catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchRides();
+    }, [fetchRides])
+  );
 
 
   return (
