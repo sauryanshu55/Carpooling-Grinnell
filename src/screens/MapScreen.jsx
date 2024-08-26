@@ -109,7 +109,7 @@ export function MapScreen({ route }) {
     setOrigin(grinnellCoords)
     setDestination(details)
     console.log(details)
-    
+
     const position = {
       latitude: details?.geometry.location.lat || 0,
       longitude: details?.geometry.location.lng || 0,

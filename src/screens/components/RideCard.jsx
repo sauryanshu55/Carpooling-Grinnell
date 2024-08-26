@@ -5,7 +5,7 @@ import { MapPin, Clock } from 'lucide-react-native';
 
 
 export const RideCard = ({ date, time, location, price, requestedBy, duration, flexibleBy, additionalInfo }) => {
-  
+
   const handleOfferToDrive = () => {
     const recipient = requestedBy.email;
     const subject = 'Offer to Drive';
